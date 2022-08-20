@@ -35,9 +35,7 @@ from esphome.const import (
     DEVICE_CLASS_VOLTAGE,
 
     STATE_CLASS_MEASUREMENT,
-    STATE_CLASS_TOTAL_INCREASING,
-
-    ESP_PLATFORM_ESP32
+    STATE_CLASS_TOTAL_INCREASING
 )
 
 UNIT_KVAH = 'kVAh'
@@ -142,25 +140,96 @@ CONF_SDM_CURRENT_RESETTABLE_EXPORT_ENERGY         = 'sdm_current_resettable_expo
 CONF_SDM_IMPORT_POWER                             = 'sdm_import_power'
 CONF_SDM_EXPORT_POWER                             = 'sdm_export_power'
 
-
-ESP_PLATFORMS = [ESP_PLATFORM_ESP32]
-
 sdm_sensor_ns = cg.esphome_ns.namespace('sdm_sensor')
 SDMSensor = sdm_sensor_ns.class_('SDMSensor', cg.PollingComponent)
 
-SCH_VOLTAGE         = sensor.sensor_schema(UNIT_VOLT,                         ICON_FLASH,      2, DEVICE_CLASS_VOLTAGE,      STATE_CLASS_MEASUREMENT)
-SCH_CURRENT         = sensor.sensor_schema(UNIT_AMPERE,                       ICON_CURRENT_AC, 3, DEVICE_CLASS_CURRENT,      STATE_CLASS_MEASUREMENT)
-SCH_ACTIVE_POWER    = sensor.sensor_schema(UNIT_WATT,                         ICON_POWER,      2, DEVICE_CLASS_POWER,        STATE_CLASS_MEASUREMENT)
-SCH_APPARENT_POWER  = sensor.sensor_schema(UNIT_VOLT_AMPS,                    ICON_POWER,      2, DEVICE_CLASS_POWER,        STATE_CLASS_MEASUREMENT)
-SCH_REACTIVE_POWER  = sensor.sensor_schema(UNIT_VOLT_AMPS_REACTIVE,           ICON_POWER,      2, DEVICE_CLASS_POWER,        STATE_CLASS_MEASUREMENT)
-SCH_POWER_FACTOR    = sensor.sensor_schema(UNIT_EMPTY,                        ICON_EMPTY,      3, DEVICE_CLASS_POWER_FACTOR, STATE_CLASS_MEASUREMENT)
-SCH_FREQUENCY       = sensor.sensor_schema(UNIT_HERTZ,                        ICON_CURRENT_AC, 3, DEVICE_CLASS_EMPTY,        STATE_CLASS_MEASUREMENT)
-SCH_ACTIVE_ENERGY   = sensor.sensor_schema(UNIT_KILOWATT_HOURS,               ICON_FLASH,      3, DEVICE_CLASS_ENERGY,       STATE_CLASS_TOTAL_INCREASING)
-SCH_REACTIVE_ENERGY = sensor.sensor_schema(UNIT_KILOVOLT_AMPS_REACTIVE_HOURS, ICON_FLASH,      3, DEVICE_CLASS_ENERGY,       STATE_CLASS_TOTAL_INCREASING)
-SCH_VAH_RESET       = sensor.sensor_schema(UNIT_KVAH,                         ICON_FLASH,      3, DEVICE_CLASS_ENERGY,       STATE_CLASS_TOTAL_INCREASING)
-SCH_AH_RESET        = sensor.sensor_schema(UNIT_AMPERE_HOURS,                 ICON_FLASH,      3, DEVICE_CLASS_ENERGY,       STATE_CLASS_TOTAL_INCREASING)
-SCH_PHASE_ANGLE     = sensor.sensor_schema(UNIT_DEGREES,                      ICON_PULSE,      3)
-SCH_THD             = sensor.sensor_schema(UNIT_PERCENT,                      ICON_CURRENT_AC, 1) # Total Harmonic Distortion
+SCH_VOLTAGE = sensor.sensor_schema(
+    unit_of_measurement=UNIT_VOLT,
+    icon=ICON_FLASH,
+    accuracy_decimals=2,
+    device_class=DEVICE_CLASS_VOLTAGE,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_CURRENT = sensor.sensor_schema(
+    unit_of_measurement=UNIT_AMPERE,
+    icon=ICON_CURRENT_AC,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_CURRENT,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_ACTIVE_POWER = sensor.sensor_schema(
+    unit_of_measurement=UNIT_WATT,
+    icon=ICON_POWER,
+    accuracy_decimals=2,
+    device_class=DEVICE_CLASS_POWER,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_APPARENT_POWER = sensor.sensor_schema(
+    unit_of_measurement=UNIT_VOLT_AMPS,
+    icon=ICON_POWER,
+    accuracy_decimals=2,
+    device_class=DEVICE_CLASS_POWER,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_REACTIVE_POWER = sensor.sensor_schema(
+    unit_of_measurement=UNIT_VOLT_AMPS_REACTIVE,
+    icon=ICON_POWER,
+    accuracy_decimals=2,
+    device_class=DEVICE_CLASS_POWER,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_POWER_FACTOR = sensor.sensor_schema(
+    unit_of_measurement=UNIT_EMPTY,
+    icon=ICON_EMPTY,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_POWER_FACTOR,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_FREQUENCY = sensor.sensor_schema(
+    unit_of_measurement=UNIT_HERTZ,
+    icon=ICON_CURRENT_AC,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_EMPTY,
+    state_class=STATE_CLASS_MEASUREMENT,
+)
+SCH_ACTIVE_ENERGY = sensor.sensor_schema(
+    unit_of_measurement=UNIT_KILOWATT_HOURS,
+    icon=ICON_FLASH,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_ENERGY,
+    state_class=STATE_CLASS_TOTAL_INCREASING,
+)
+SCH_REACTIVE_ENERGY = sensor.sensor_schema(
+    unit_of_measurement=UNIT_KILOVOLT_AMPS_REACTIVE_HOURS,
+    icon=ICON_FLASH,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_ENERGY,
+    state_class=STATE_CLASS_TOTAL_INCREASING,
+)
+SCH_VAH_RESET = sensor.sensor_schema(
+    unit_of_measurement=UNIT_KVAH,
+    icon=ICON_FLASH,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_ENERGY,
+    state_class=STATE_CLASS_TOTAL_INCREASING,
+)
+SCH_AH_RESET = sensor.sensor_schema(
+    unit_of_measurement=UNIT_AMPERE_HOURS,
+    icon=ICON_FLASH,
+    accuracy_decimals=3,
+    device_class=DEVICE_CLASS_ENERGY,
+    state_class=STATE_CLASS_TOTAL_INCREASING,
+)
+SCH_PHASE_ANGLE = sensor.sensor_schema(
+    unit_of_measurement=UNIT_DEGREES,
+    icon=ICON_PULSE,
+    accuracy_decimals=3,
+)
+SCH_THD = sensor.sensor_schema(
+    unit_of_measurement=UNIT_PERCENT,
+    icon=ICON_CURRENT_AC,
+    accuracy_decimals=1,
+)
 
 CONFIG_SCHEMA = cv.Schema({
     cv.GenerateID(): cv.declare_id(SDMSensor),

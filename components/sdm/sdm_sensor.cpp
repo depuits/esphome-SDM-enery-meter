@@ -8,6 +8,10 @@ namespace sdm_sensor {
 static const char *TAG = "sdm_sensor.SDMSensor";
 
 float SDMSensor::readVal(uint16_t reg) {
+	int read_delay = 10;
+	ESP_LOGD(TAG, "Reading delay %i ms", read_delay);
+	delay(read_delay); // https://github.com/reaper7/SDM_Energy_Meter/issues/7#issuecomment-272080139
+
 	float val = sdm->readVal(reg, channel_);
 
 	uint16_t err = sdm->getErrCode(true);
@@ -15,11 +19,30 @@ float SDMSensor::readVal(uint16_t reg) {
 		ESP_LOGE(TAG, "Error %i", err);
 	}
 
-	delay(10); // https://github.com/reaper7/SDM_Energy_Meter/issues/7#issuecomment-272080139
 	return val;
 }
+
 void SDMSensor::setup() {
-	sdm = new SDM(Serial, baud_, dere_pin_, SERIAL_8N1, rx_pin_, tx_pin_);
+	#if defined ( USE_HARDWARESERIAL )
+		#if defined ( ESP8266 )
+			ESP_LOGD(TAG, "SDM HARDWARESERIAL ESP8266");
+			sdm = new SDM(Serial, baud_, dere_pin_, SERIAL_8N1);
+		#elif defined ( ESP32 )
+			ESP_LOGD(TAG, "SDM HARDWARESERIAL ESP32");
+			sdm = new SDM(Serial, baud_, dere_pin_, SERIAL_8N1, rx_pin_, tx_pin_);
+		#else
+			ESP_LOGD(TAG, "SDM HARDWARESERIAL ELSE");
+			sdm = new SDM(Serial, baud_, dere_pin_, SERIAL_8N1);
+		#endif
+	#else
+		#if defined ( ESP8266 ) || defined ( ESP32 )
+			ESP_LOGD(TAG, "SDM SOFTWARESERIAL ESP8266/ESP32");
+			sdm = new SDM(Serial, baud_, dere_pin_, SERIAL_8N1, rx_pin_, tx_pin_);
+		#else
+			ESP_LOGD(TAG, "SDM SOFTWARESERIAL ELSE");
+			sdm = new SDM(Serial, baud_, dere_pin_);
+		#endif
+	#endif
 	sdm->begin();
 	ESP_LOGD(TAG, "Setup completed");
 }
