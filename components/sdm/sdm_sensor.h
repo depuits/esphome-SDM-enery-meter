@@ -5,6 +5,9 @@
 
 class SDM;
 
+// ESPHome 2022.6.2 throws an error of undeclared NOT_A_PIN
+#define NOT_A_PIN -1
+
 #define INODE_SET_METHOD(type, name, default) \
   type name##_{default}; \
   void set_##name(type name) { name##_ = name; }
